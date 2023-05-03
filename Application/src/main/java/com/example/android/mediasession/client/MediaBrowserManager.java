@@ -66,8 +66,6 @@ public class MediaBrowserManager {
 
     /**
      * 构造方法
-     *
-     * @param context
      */
     public MediaBrowserManager(Context context) {
         mContext = context;
@@ -113,8 +111,6 @@ public class MediaBrowserManager {
 
     /**
      * 获取播放控制器 通过该方法控制播放
-     *
-     * @return
      */
     public MediaControllerCompat.TransportControls getTransportControls() {
         if (mMediaController == null) {
@@ -146,16 +142,14 @@ public class MediaBrowserManager {
                         mMediaBrowserCompat.getSessionToken());
                 mMediaController.registerCallback(mMediaControllerCallback);
 
-                /**
-                 * 设置当前数据
-                 */
+                // 设置当前数据
                 // Sync existing MediaSession state to the UI.
                 mMediaControllerCallback.onMetadataChanged(mMediaController.getMetadata());
                 mMediaControllerCallback.onPlaybackStateChanged(mMediaController.getPlaybackState());
 
 
             } catch (RemoteException e) {
-                Log.d(TAG, String.format("onConnected: Problem: %s", e.toString()));
+                Log.d(TAG, String.format("onConnected: Problem: %s", e));
                 throw new RuntimeException(e);
             }
 
@@ -175,9 +169,6 @@ public class MediaBrowserManager {
 
         /**
          * service 的数据发送到这里
-         *
-         * @param parentId
-         * @param children
          */
         @Override
         public void onChildrenLoaded(@NonNull String parentId,
@@ -222,18 +213,10 @@ public class MediaBrowserManager {
 
         @Override
         public void onQueueChanged(List<MediaSessionCompat.QueueItem> queue) {
-            super.onQueueChanged(queue);
             //
             for (OnMediaStatusChangeListener callback : mMediaStatusChangeListenerList) {
                 callback.onQueueChanged(queue);
             }
-        }
-
-        // service被杀死时调用
-        @Override
-        public void onSessionDestroyed() {
-            // onSessionDestroyed: MusicService is dead!!!
-            onPlaybackStateChanged(null);
         }
 
     }
@@ -243,12 +226,10 @@ public class MediaBrowserManager {
     /**
      * 音频变化回调 管理列表
      */
-    private List<OnMediaStatusChangeListener> mMediaStatusChangeListenerList = new ArrayList<>();
+    private final List<OnMediaStatusChangeListener> mMediaStatusChangeListenerList = new ArrayList<>();
 
     /**
      * 添加音频变化回调
-     *
-     * @param l
      */
     public void addOnMediaStatusListener(OnMediaStatusChangeListener l) {
         mMediaStatusChangeListenerList.add(l);
@@ -256,8 +237,6 @@ public class MediaBrowserManager {
 
     /**
      * 移除音频变化回调
-     *
-     * @param l
      */
     public void removeOnMediaStatusListener(OnMediaStatusChangeListener l) {
         mMediaStatusChangeListenerList.remove(l);
@@ -272,7 +251,7 @@ public class MediaBrowserManager {
         /**
          * 播放状态修改
          */
-        void onPlaybackStateChanged(@NonNull PlaybackStateCompat state);
+        void onPlaybackStateChanged(@Nullable PlaybackStateCompat state);
 
         /**
          * 当前播放歌曲信息修改

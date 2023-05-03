@@ -50,8 +50,6 @@ public abstract class PlayerAdapter {
 
     /**
      * 构造方法
-     *
-     * @param context
      */
     public PlayerAdapter(@NonNull Context context) {
         // 上下文对象
@@ -128,15 +126,11 @@ public abstract class PlayerAdapter {
 
     /**
      * seek to
-     *
-     * @param position
      */
     public abstract void seekTo(long position);
 
     /**
      * 设置音频播放音量
-     *
-     * @param volume
      */
     public abstract void setVolume(float volume);
 
@@ -158,29 +152,30 @@ public abstract class PlayerAdapter {
 
         /**
          * 请求音频焦点
-         *
-         * @return
          */
         public boolean requestAudioFocus() {
             // 请求音频焦点  并判断音频焦点的获取情况
-            final int result = mAudioManager.requestAudioFocus(this,
-                    AudioManager.STREAM_MUSIC,
-                    AudioManager.AUDIOFOCUS_GAIN);
-            return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
+            if (null != mAudioManager) {
+                final int result = mAudioManager.requestAudioFocus(this,
+                        AudioManager.STREAM_MUSIC,
+                        AudioManager.AUDIOFOCUS_GAIN);
+                return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
+            }
+            return false;
         }
 
         /**
          * 放弃音频焦点
          */
         public void abandonAudioFocus() {
-            mAudioManager.abandonAudioFocus(this);
+            if (null != mAudioManager) {
+                mAudioManager.abandonAudioFocus(this);
+            }
         }
 
 
         /**
          * 音频焦点变化回调
-         *
-         * @param focusChange
          */
         @Override
         public void onAudioFocusChange(int focusChange) {
@@ -212,8 +207,8 @@ public abstract class PlayerAdapter {
                 // 失去焦点
                 case AudioManager.AUDIOFOCUS_LOSS:
                     // 停止播放
-                    mAudioManager.abandonAudioFocus(this);
                     mPlayingOnAudioFocusLoss = false;
+                    abandonAudioFocus();
                     stop();
                     break;
             }

@@ -62,9 +62,6 @@ public class MusicService extends MediaBrowserServiceCompat {
     public void onCreate() {
         super.onCreate();
 
-        /**
-         * MediaSessionCompat
-         */
         // 创建MediaSessionCompat
         mMediaSessionCompat = new MediaSessionCompat(this, "MusicService");
         // setCallBack
@@ -76,14 +73,10 @@ public class MusicService extends MediaBrowserServiceCompat {
         // setSessionToken
         setSessionToken(mMediaSessionCompat.getSessionToken());
 
-        /**
-         * MediaNotificationManager
-         */
+        // MediaNotificationManager
         mMediaNotificationManager = new MediaNotificationManager(this);
 
-        /**
-         * MediaPlayerManager
-         */
+        // MediaPlayerManager
         mMediaPlayerManager = new MediaPlayerManager(this, new MediaPlayerListener());
     }
 
@@ -213,8 +206,6 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         /**
          * 判断列表数据状态
-         *
-         * @return
          */
         private boolean isReadyToPlay() {
             return (!mPlaylist.isEmpty());
@@ -261,9 +252,6 @@ public class MusicService extends MediaBrowserServiceCompat {
         }
 
         class ServiceManager {
-            /**
-             * @param state
-             */
             private void moveServiceToStartedState(PlaybackStateCompat state) {
                 //
                 Notification notification =
@@ -280,9 +268,6 @@ public class MusicService extends MediaBrowserServiceCompat {
                 startForeground(MediaNotificationManager.NOTIFICATION_ID, notification);
             }
 
-            /**
-             * @param state
-             */
             private void updateNotificationForPause(PlaybackStateCompat state) {
                 stopForeground(false);
                 Notification notification =
@@ -292,9 +277,6 @@ public class MusicService extends MediaBrowserServiceCompat {
                         .notify(MediaNotificationManager.NOTIFICATION_ID, notification);
             }
 
-            /**
-             * @param state
-             */
             private void moveServiceOutOfStartedState(PlaybackStateCompat state) {
                 stopForeground(true);
                 stopSelf();

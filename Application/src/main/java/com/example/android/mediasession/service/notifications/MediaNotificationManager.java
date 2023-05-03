@@ -37,7 +37,6 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
 import com.example.android.mediasession.R;
-import com.example.android.mediasession.service.MusicService;
 import com.example.android.mediasession.service.contentcatalogs.MusicLibrary;
 import com.example.android.mediasession.ui.MainActivity;
 
@@ -67,9 +66,6 @@ public class MediaNotificationManager {
      */
     private final Context mContext;
 
-    /**
-     * @param context
-     */
     public MediaNotificationManager(Context context) {
         // MediaBrowserService
         mContext = context;
@@ -77,9 +73,6 @@ public class MediaNotificationManager {
         mNotificationManager = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        /**
-         *
-         */
         mPlayAction =
                 new NotificationCompat.Action(
                         R.drawable.ic_play_arrow_white_24dp,
@@ -109,7 +102,7 @@ public class MediaNotificationManager {
 
         // Cancel all notifications to handle the case where the Service was killed and
         // restarted by the system.
-        mNotificationManager.cancelAll();
+        if (null != mNotificationManager) mNotificationManager.cancelAll();
     }
 
     public void onDestroy() {
@@ -217,8 +210,14 @@ public class MediaNotificationManager {
     private PendingIntent createContentIntent() {
         Intent openUI = new Intent(mContext, MainActivity.class);
         openUI.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        int pendingIntentFlag;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            pendingIntentFlag = PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT;
+        }else {
+            pendingIntentFlag = PendingIntent.FLAG_UPDATE_CURRENT;
+        }
         return PendingIntent.getActivity(
-                mContext, REQUEST_CODE, openUI, PendingIntent.FLAG_CANCEL_CURRENT);
+                mContext, REQUEST_CODE, openUI, pendingIntentFlag);
     }
 
 }

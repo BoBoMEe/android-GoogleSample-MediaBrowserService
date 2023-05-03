@@ -46,19 +46,6 @@ public class MusicLibrary {
     // 音频名称
     private static final HashMap<String, String> musicFileName = new HashMap<>();
 
-    /**
-     * 构造音频数据
-     * @param mediaId         音频id
-     * @param title           标题
-     * @param artist          作者
-     * @param album           图片
-     * @param genre           种类
-     * @param duration        时长
-     * @param durationUnit    时间单位
-     * @param musicFilename   音频文件
-     * @param albumArtResId   资源id
-     * @param albumArtResName
-     */
     static {
         createMediaMetadataCompat(
                 "Jazz_In_Paris",
@@ -103,10 +90,6 @@ public class MusicLibrary {
 
     /**
      * 根据id 获取图片
-     *
-     * @param context
-     * @param mediaId
-     * @return
      */
     public static Bitmap getAlbumBitmap(Context context, String mediaId) {
         //
@@ -126,10 +109,6 @@ public class MusicLibrary {
 
     /**
      * 拷贝一份音频数据
-     *
-     * @param context
-     * @param mediaId
-     * @return
      */
     public static MediaMetadataCompat getMetadata(Context context, String mediaId) {
         // 根据id 音频列表获取音频数据
@@ -171,7 +150,7 @@ public class MusicLibrary {
      * @param durationUnit    时间单位
      * @param musicFilename   音频文件
      * @param albumArtResId   资源id
-     * @param albumArtResName
+     * @param albumArtResName 资源名称
      */
     private static void createMediaMetadataCompat(
             String mediaId,

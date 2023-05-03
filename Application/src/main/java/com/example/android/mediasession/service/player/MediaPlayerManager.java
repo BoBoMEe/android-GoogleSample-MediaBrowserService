@@ -42,7 +42,7 @@ public final class MediaPlayerManager extends PlayerAdapter {
     // 音频播放器MediaPlayer
     private MediaPlayer mMediaPlayer;
     // 播放信息回调
-    private PlaybackInfoListener mPlaybackInfoListener;
+    private final PlaybackInfoListener mPlaybackInfoListener;
 
     /**
      *
@@ -64,9 +64,6 @@ public final class MediaPlayerManager extends PlayerAdapter {
 
     /**
      * 构造方法
-     *
-     * @param context
-     * @param listener
      */
     public MediaPlayerManager(Context context, PlaybackInfoListener listener) {
         super(context);
@@ -95,8 +92,6 @@ public final class MediaPlayerManager extends PlayerAdapter {
 
     /**
      * 音频是否在播放
-     *
-     * @return
      */
     @Override
     public boolean isPlaying() {
@@ -135,8 +130,6 @@ public final class MediaPlayerManager extends PlayerAdapter {
 
     /**
      * seek
-     *
-     * @param position
      */
     @Override
     public void seekTo(long position) {
@@ -157,8 +150,6 @@ public final class MediaPlayerManager extends PlayerAdapter {
 
     /**
      * 设置音频播放音量
-     *
-     * @param volume
      */
     @Override
     public void setVolume(float volume) {
@@ -204,12 +195,11 @@ public final class MediaPlayerManager extends PlayerAdapter {
 
     /**
      * 根据音频id进行音频播放
-     *
-     * @param filename
      */
     private void playFile(String filename) {
+        if (null == filename) return;
         // 音频是否发生变化
-        boolean mediaChanged = (mFilename == null || !filename.equals(mFilename));
+        boolean mediaChanged = !filename.equals(mFilename);
         // 音频是否播放完成
         if (mCurrentMediaPlayedToCompletion) {
             // Last audio file was played to completion, the resourceId hasn't changed, but the
@@ -256,17 +246,13 @@ public final class MediaPlayerManager extends PlayerAdapter {
 
     /**
      * 播放状态
-     *
-     * @param newPlayerState
      */
     // This is the main reducer for the player state machine.
     private void setNewState(@PlaybackStateCompat.State int newPlayerState) {
         // 设置播放状态
         mState = newPlayerState;
 
-        /**
-         * 状态为STOPPED，则为完成状态
-         */
+        // 状态为STOPPED，则为完成状态
         // Whether playback goes to completion, or whether it is stopped, the
         // mCurrentMediaPlayedToCompletion is set to true.
         if (mState == PlaybackStateCompat.STATE_STOPPED) {

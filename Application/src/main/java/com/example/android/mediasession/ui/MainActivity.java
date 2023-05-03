@@ -17,7 +17,7 @@
 package com.example.android.mediasession.ui;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
              * 播放状态修改
              */
             @Override
-            public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
+            public void onPlaybackStateChanged(@Nullable PlaybackStateCompat state) {
                 // 播放音频 状态变化
                 onMediaPlaybackStateChanged(state);
             }
@@ -194,8 +194,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 更改播放按钮背景状态
-     *
-     * @param isPlaying
      */
     private void setControlBg(boolean isPlaying) {
         if (isPlaying) {
@@ -211,8 +209,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 音频播放状态变化的回调
-     *
-     * @param playbackState
      */
     private void onMediaPlaybackStateChanged(PlaybackStateCompat playbackState) {
         if (playbackState == null) {
@@ -225,9 +221,7 @@ public class MainActivity extends AppCompatActivity {
         // 更新UI
         setControlBg(mIsPlaying);
 
-        /**
-         * 设置播放进度
-         */
+        // 设置播放进度
         final int progress = (int) playbackState.getPosition();
         mSeekBarAudio.setProgress(progress);
         switch (playbackState.getState()) {
@@ -246,8 +240,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 播放音频数据 发生变化的回调
-     *
-     * @param mediaMetadata
      */
     private void onMediaMetadataChanged(MediaMetadataCompat mediaMetadata) {
         if (mediaMetadata == null) {
@@ -265,9 +257,7 @@ public class MainActivity extends AppCompatActivity {
                 mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)));
 
         // 进度条
-        final int max = mediaMetadata != null
-                ? (int) mediaMetadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
-                : 0;
+        final int max = (int) mediaMetadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION);
         mSeekBarAudio.setProgress(0);
         mSeekBarAudio.setMax(max);
     }

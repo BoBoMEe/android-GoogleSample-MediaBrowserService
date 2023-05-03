@@ -74,10 +74,6 @@ public class MediaSeekBar extends AppCompatSeekBar {
 
     /**
      * 开始
-     *
-     * @param start
-     * @param end
-     * @param duration
      */
     public void startProgressAnima(int start, int end, int duration) {
         // 停止播放动画
@@ -110,8 +106,6 @@ public class MediaSeekBar extends AppCompatSeekBar {
 
     /**
      * 更新进度
-     *
-     * @param valueAnimator
      */
     public void onProgressUpdate(final ValueAnimator valueAnimator) {
         // If the user is changing the slider, cancel the animation.

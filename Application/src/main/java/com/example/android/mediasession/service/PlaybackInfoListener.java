@@ -29,8 +29,6 @@ public abstract class PlaybackInfoListener {
 
     /**
      * 播放状态变化
-     *
-     * @param state
      */
     public abstract void onPlaybackStateChange(PlaybackStateCompat state);
 
