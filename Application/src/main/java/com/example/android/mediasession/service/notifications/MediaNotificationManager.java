@@ -54,6 +54,7 @@ public class MediaNotificationManager {
     private static final int REQUEST_CODE = 501;
 
 
+    private final NotificationCompat.Action mCloseAction;
     private final NotificationCompat.Action mPlayAction;
     private final NotificationCompat.Action mPauseAction;
     private final NotificationCompat.Action mNextAction;
@@ -73,32 +74,31 @@ public class MediaNotificationManager {
         mNotificationManager = (NotificationManager)
                 mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        mCloseAction  =
+                new NotificationCompat.Action(
+                        R.drawable.ic_close_white_48dp,
+                        mContext.getString(R.string.label_stop),
+                        MediaButtonReceiver.buildMediaButtonPendingIntent(mContext, PlaybackStateCompat.ACTION_STOP));
         mPlayAction =
                 new NotificationCompat.Action(
-                        R.drawable.ic_play_arrow_white_24dp,
+                        R.drawable.ic_play_arrow_white_48dp,
                         mContext.getString(R.string.label_play),
                         MediaButtonReceiver.buildMediaButtonPendingIntent(mContext, PlaybackStateCompat.ACTION_PLAY));
         mPauseAction =
                 new NotificationCompat.Action(
-                        R.drawable.ic_pause_white_24dp,
+                        R.drawable.ic_pause_white_48dp,
                         mContext.getString(R.string.label_pause),
-                        MediaButtonReceiver.buildMediaButtonPendingIntent(
-                                mContext,
-                                PlaybackStateCompat.ACTION_PAUSE));
+                        MediaButtonReceiver.buildMediaButtonPendingIntent(mContext, PlaybackStateCompat.ACTION_PAUSE));
         mNextAction =
                 new NotificationCompat.Action(
-                        R.drawable.ic_skip_next_white_24dp,
+                        R.drawable.ic_skip_next_white_48dp,
                         mContext.getString(R.string.label_next),
-                        MediaButtonReceiver.buildMediaButtonPendingIntent(
-                                mContext,
-                                PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
+                        MediaButtonReceiver.buildMediaButtonPendingIntent(mContext, PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
         mPrevAction =
                 new NotificationCompat.Action(
-                        R.drawable.ic_skip_previous_white_24dp,
+                        R.drawable.ic_skip_previous_white_48dp,
                         mContext.getString(R.string.label_previous),
-                        MediaButtonReceiver.buildMediaButtonPendingIntent(
-                                mContext,
-                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));
+                        MediaButtonReceiver.buildMediaButtonPendingIntent(mContext, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS));
 
         // Cancel all notifications to handle the case where the Service was killed and
         // restarted by the system.
@@ -139,7 +139,7 @@ public class MediaNotificationManager {
         builder.setStyle(
                 new MediaStyle()
                         .setMediaSession(token)
-                        .setShowActionsInCompactView(0, 1, 2)
+                        .setShowActionsInCompactView(1, 3)
                         // For backwards compatibility with Android L and earlier.
                         .setShowCancelButton(true)
                         .setCancelButtonIntent(
@@ -147,7 +147,7 @@ public class MediaNotificationManager {
                                         mContext,
                                         PlaybackStateCompat.ACTION_STOP)))
                 .setColor(ContextCompat.getColor(mContext, R.color.notification_bg))
-                .setSmallIcon(R.drawable.ic_stat_image_audiotrack)
+                .setSmallIcon(R.drawable.ic_notification)
                 // Pending intent that is fired when user clicks on notification.
                 .setContentIntent(createContentIntent())
                 // Title - Usually Song name.
@@ -173,6 +173,8 @@ public class MediaNotificationManager {
         if ((state.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_NEXT) != 0) {
             builder.addAction(mNextAction);
         }
+
+        builder.addAction(mCloseAction);
 
         return builder;
     }
